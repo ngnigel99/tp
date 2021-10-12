@@ -13,9 +13,11 @@ public class CommandConstants {
     public static final String COMMAND_ADD_NOTE = "add";
     public static final String COMMAND_ADD_ENTRY = "entryadd";
     public static final String COMMAND_NOTE = "note";
-    public static final String COMMAND_ADD_MODULE = "module add";
     public static final String COMMAND_TODO = "todo";
     public static final String COMMAND_LIST_TASKS = "list";
+
+    public static final String COMMAND_MODULE = "module";
+    public static final String COMMAND_SUFFIX_DELETE = "delete";
 
     //HELP COMMANDS BEGIN
     public static final String COMMAND_HElP = "help";
