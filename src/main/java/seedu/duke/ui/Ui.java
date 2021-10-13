@@ -1,9 +1,10 @@
 package seedu.duke.ui;
 
 import seedu.duke.commands.DisplayCalendarCommand;
+import seedu.duke.exceptions.IncorrectNumberOfArgumentsException;
+import seedu.duke.exceptions.InvalidDateMonthException;
 import seedu.duke.food.FoodRecord;
 import seedu.duke.constants.Messages;
-import seedu.duke.schedule.Schedule;
 import seedu.duke.task.Task;
 import seedu.duke.storage.Storage;
 
@@ -28,7 +29,6 @@ import static seedu.duke.constants.Messages.HELP_MESSAGE_FOOD;
 import static seedu.duke.constants.Messages.HELP_MESSAGE_MODULE;
 import static seedu.duke.constants.Messages.HORIZONTAL_LINE;
 import static seedu.duke.constants.Messages.INVALID_CALENDAR_INPUT;
-import static seedu.duke.constants.Messages.INVALID_YEARMONTH;
 import static seedu.duke.constants.Messages.LIST_TASKS_HEADER;
 import static seedu.duke.constants.Messages.LOGO;
 import static seedu.duke.constants.Messages.MESSAGE_GOODBYE;
@@ -126,18 +126,26 @@ public class Ui {
 
     //end of FOOD
 
-    //UI for journal
-    public static void printIntroMessage() {
-        System.out.println("Hello, I am Journal Bud.");
-        System.out.println("How may I help you?");
-    }
-
+    /**
+     * Prints message to indicate note has been added.
+     *
+     * @author SvethaMahadevan
+     */
     public static void printAddedNoteMessage(String noteName) {
         System.out.println("Great you have added the note: " + noteName);
     }
+
+    /**
+     * Prints message to indicate entry has been added.
+     *
+     * @author SvethaMahadevan
+     */
+    public static void printAddedEntryMessage(String entryName) {
+        System.out.println("Great you have added the entry: " + entryName);
+    }
     //end of UI for journal
 
-    //@author swatim
+
     //Schedule
     /**
      * Prints the header of the calendar with the month and year.
@@ -151,25 +159,18 @@ public class Ui {
     }
 
     /**
-     * Prints error message for invalid calendar display input.
-     */
-    public static void printInvalidYearMonthMessage() {
-        System.out.println(INVALID_CALENDAR_INPUT);
-    }
-
-    /**
-     * Prints error message for invalid year (invalid if >2025 or <2021)
-     * or month (invalid if >12 or <1) values
-     * for calendar display command.
+     * Prints error message for all invalid calendar inputs
+     * telling user to use 'command help'.
      */
     public static void printInvalidCalendarInput() {
-        System.out.println(INVALID_YEARMONTH);
+        System.out.println(INVALID_CALENDAR_INPUT);
     }
 
     /**
      * Prints calendar for current month (intro display).
      */
-    public static void printCurrentMonthCalendar() {
+    public static void printCurrentMonthCalendar() throws
+            IncorrectNumberOfArgumentsException, InvalidDateMonthException {
         YearMonth currentYearMonth = YearMonth.now();
         String month = String.valueOf(currentYearMonth.getMonthValue());
         String year = String.valueOf(currentYearMonth.getYear());
@@ -200,14 +201,23 @@ public class Ui {
         }
     }
 
+    /**
+     * Prints calendar lines for display.
+     */
     public static void printCalendarLine() {
         System.out.println(DISPLAY_LINE);
     }
 
+    /**
+     * Prints out the vertical lines between days.
+     */
     public static void printDayDemarcation() {
         System.out.print(DAY_DEMARCATION);
     }
 
+    /**
+     * Prints out the task grid for empty task days.
+     */
     public static void printEmptyTaskSpot() {
         System.out.print(NO_TASK_IN_DAY);
     }

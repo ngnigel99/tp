@@ -14,11 +14,10 @@ import java.util.Scanner;
 public class ListTasksCommand extends Command {
 
     public ListTasksCommand() {
-        super();
     }
 
     @Override
-    public void execute(Ui ui, Storage storage) throws IOException, InvalidArgumentsException {
+    public void execute(Ui ui, Storage storage) throws IOException {
         TaskList tasks = StorageTasks.readTaskList();
         Ui.printTaskList(tasks.getTaskList());
     }

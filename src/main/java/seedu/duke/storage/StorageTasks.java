@@ -1,5 +1,6 @@
 package seedu.duke.storage;
 
+import seedu.duke.logger.ClickLogger;
 import seedu.duke.task.Task;
 import seedu.duke.task.TaskList;
 import seedu.duke.task.Todo;
@@ -8,6 +9,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.logging.Level;
 
 import static seedu.duke.constants.Messages.TODO;
 import static seedu.duke.constants.Messages.INDEX_TODO_DESCRIPTION;

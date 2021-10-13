@@ -8,12 +8,7 @@ public class Messages {
             + "\t" + "| |_| | |_| |   <  __/\n"
             + "\t" + "|____/ \\__,_|_|\\_\\___|\n\n";
 
-    public static final String OPEN_SQUARE_BRACKET = "[";
-    public static final String CLOSE_SQUARE_BRACKET = "]";
-    public static final String VERTICAL_BAR = " | ";
-    public static final String VERTICAL_BAR_REGEX = " \\| ";
     public static final String EMPTY_STRING = "";
-
     public static final String LINE_PREFIX = "\t";
     public static final String LINE_SEPARATOR = System.lineSeparator();
     public static final String NEW_LINE = LINE_SEPARATOR + LINE_PREFIX;
@@ -34,14 +29,14 @@ public class Messages {
     //@author swatim
     //SCHEDULE BEGIN
     public static String CALENDAR_HEADER_LINE = "________________________________________________________";
-    public static final String INVALID_CALENDAR_INPUT = " Invalid Input! Please "
-            + "type command in format:   | calendar MM-YYYY |";
-    public static final String INVALID_YEARMONTH = " Invalid Input! Please give "
-            + "a month between 1-12 and year between 2021-2025";
-    public static final int YEAR_UPPER_LIMIT = 2025;
-    public static final int YEAR_LOWER_LIMIT = 2021;
+    public static final String INVALID_CALENDAR_INPUT = " Invalid Input! "
+            + "PLease use 'calendar help' to check what commands are available under calendar!";
     public static final int MONTH_UPPER_LIMIT = 12;
     public static final int MONTH_LOWER_LIMIT = 1;
+    public static final String TASK_FORMATTER = "    |";
+    public static final String CALENDER_DATE_FORMATTER = "            |";
+    public static final String SEPARATOR_DISPLAY = "|";
+    public static final String EMPTY_SPACE = "";
     public static final int NUMBER_OF_DAYS_IN_WEEK = 7;
     public static final String LEAVE_EMPTY_IN_DISPLAY = "  ";
     public static final String[] DAYS_IN_MONTH = {"01", "02", "03", "04", "05",
@@ -60,6 +55,10 @@ public class Messages {
             + "-----------------------------------------";
     public static final String DAY_DEMARCATION = "|";
     public static final String NO_TASK_IN_DAY = "              |";
+    public static final String DELETED_TASK = "Task has been deleted!";
+    public static final String CALENDAR_INVALID_ARGS = "'calendar' should be followed by a suffixed command!";
+    public static final String CALENDAR_DELETE_INVALID_ARGS = "Task index not entered...need task index to delete!";
+    public static final String DELIMETER_DATE = "-";
     //SCHEDULE END
 
     //HELP BEGIN

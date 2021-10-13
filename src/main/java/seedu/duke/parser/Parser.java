@@ -1,12 +1,14 @@
 package seedu.duke.parser;
 
+import seedu.duke.commands.Command;
 import seedu.duke.commands.AddEntryCommand;
+import seedu.duke.commands.ListJournalCommand;
 import seedu.duke.commands.AddFoodCommand;
 import seedu.duke.commands.AddModuleCommand;
 import seedu.duke.commands.AddNoteCommand;
 import seedu.duke.commands.AddTodoCommand;
 import seedu.duke.commands.ClearFoodCommand;
-import seedu.duke.commands.Command;
+import seedu.duke.commands.DeleteTaskCommand;
 import seedu.duke.commands.DeleteModuleCommand;
 import seedu.duke.commands.DisplayCalendarCommand;
 import seedu.duke.commands.ExitCommand;
@@ -14,29 +16,29 @@ import seedu.duke.commands.HelpCommand;
 import seedu.duke.commands.ListFoodCommand;
 import seedu.duke.commands.ListModuleCommand;
 import seedu.duke.commands.ListTasksCommand;
-import seedu.duke.exceptions.StorageException;
-import seedu.duke.food.FoodRecord;
-import seedu.duke.constants.Messages;
+import seedu.duke.exceptions.IncorrectNumberOfArgumentsException;
+import seedu.duke.exceptions.ArgumentsNotFoundException;
 import seedu.duke.exceptions.ClickException;
 import seedu.duke.exceptions.IllegalDateTimeException;
-import seedu.duke.exceptions.IllegalFoodParameterException;
-import seedu.duke.module.Module;
-import seedu.duke.commands.HelpCommand;
-import seedu.duke.commands.DeleteTaskCommand;
-import seedu.duke.exceptions.ArgumentsNotFoundException;
 import seedu.duke.exceptions.WrongDividerOrderException;
+import seedu.duke.exceptions.StorageException;
+import seedu.duke.exceptions.IllegalFoodParameterException;
+import seedu.duke.exceptions.EmptyJournalArgumentException;
+import seedu.duke.exceptions.IncorrectJournalArgumentException;
+
 import seedu.duke.food.FoodRecord;
 import seedu.duke.constants.Messages;
+import seedu.duke.module.Module;
+import seedu.duke.parser.schedule.ParserSchedule;
 import seedu.duke.ui.Ui;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 
 import static seedu.duke.constants.CommandConstants.COMMAND_ADD_ENTRY;
 import static seedu.duke.constants.CommandConstants.COMMAND_ADD_NOTE;
+import static seedu.duke.constants.CommandConstants.COMMAND_JOURNAL_LIST;
 import static seedu.duke.constants.CommandConstants.COMMAND_CALENDAR;
 import static seedu.duke.constants.CommandConstants.COMMAND_EXIT;
 import static seedu.duke.constants.CommandConstants.COMMAND_FOOD;
@@ -50,7 +52,8 @@ import static seedu.duke.constants.CommandConstants.COMMAND_SUFFIX_DELETE;
 import static seedu.duke.constants.CommandConstants.COMMAND_SUFFIX_LIST;
 import static seedu.duke.constants.CommandConstants.COMMAND_TODO;
 import static seedu.duke.constants.Messages.EMPTY_STRING;
-import static seedu.duke.constants.Messages.TODO;
+import static seedu.duke.constants.Messages.CALENDAR_INVALID_ARGS;
+import static seedu.duke.constants.Messages.CALENDAR_DELETE_INVALID_ARGS;
 
 //@@author nvbinh15
 public class Parser {
@@ -118,20 +121,6 @@ public class Parser {
         }
     }
 
-    private static ArrayList<String> parseTodoCommand(String input) {
-        ArrayList<String> argumentsTodoCommand = new ArrayList<>();
-        //Split command name away from input string
-        String todoDetails = input.trim().split("todo")[1];
-        String descriptionAndDate = todoDetails.split("n/")[1].trim();
-        //Split description and date
-        String description = descriptionAndDate.split("d/")[0].trim();
-        String date = descriptionAndDate.split("d/")[1].trim();
-
-        List<String> todoArguments = Arrays.asList(TODO, description, date);
-        argumentsTodoCommand.addAll(todoArguments);
-        return argumentsTodoCommand;
-    }
-
     /**
      * Parses a line of text to a food record.
      * Assumes that both name, calories field not null.
@@ -151,7 +140,9 @@ public class Parser {
      * @return The command to be executed.
      * @throws ClickException If there is an exception to type DukeException occurs.
      */
-    public Command parseCommand(String userInput) throws ClickException {
+    public Command parseCommand(String userInput)
+            throws ClickException, IncorrectNumberOfArgumentsException, IncorrectJournalArgumentException,
+            EmptyJournalArgumentException {
         final String[] commandTypeAndParams = splitCommandAndArgs(userInput);
         assert commandTypeAndParams.length == 2;
         final String commandType = commandTypeAndParams[0];
@@ -166,11 +157,16 @@ public class Parser {
             case COMMAND_LIST_TASKS:
                 return new ListTasksCommand();
             case COMMAND_TODO:
-                ArrayList<String> arguments = parseTodoCommand(userInput);
+                ArrayList<String> arguments = ParserSchedule.parseTodoCommand(userInput);
                 return new AddTodoCommand(arguments);
-            case "delete":
+            case COMMAND_SUFFIX_DELETE:
+                if (todoArguments.length == 1) {
+                    throw new IncorrectNumberOfArgumentsException(CALENDAR_DELETE_INVALID_ARGS);
+                }
                 int indexOfTaskToBeDeleted = Integer.parseInt(todoArguments[1]);
-                return new DeleteTaskCommand(indexOfTaskToBeDeleted);
+                return new DeleteTaskCommand(indexOfTaskToBeDeleted, userInput);
+            case EMPTY_STRING:
+                throw new IncorrectNumberOfArgumentsException(CALENDAR_INVALID_ARGS);
             default:
                 return new DisplayCalendarCommand(userInput);
             }
@@ -194,8 +190,12 @@ public class Parser {
                 return new AddNoteCommand(userInput);
             case COMMAND_ADD_ENTRY:
                 return new AddEntryCommand(userInput);
+            case COMMAND_JOURNAL_LIST:
+                return new ListJournalCommand();
+            case "":
+                throw new EmptyJournalArgumentException();
             default:
-                throw new ClickException();
+                throw new IncorrectJournalArgumentException();
             }
         case COMMAND_MODULE:
             String[] moduleCommandAndArgs = splitCommandAndArgs(commandArgs);
@@ -214,14 +214,6 @@ public class Parser {
         default:
             throw new ClickException();
         }
-    }
-
-    //@author swatim
-    public static String[] parseCalendarCommand(String input) {
-        // takes substring excluding "calendar" from command
-        String extractMonthYear = input.substring(9);
-        String[] arguments = extractMonthYear.split("-");
-        return arguments;
     }
 
     //@author ngnigel99

@@ -1,9 +1,8 @@
 package seedu.duke.storage;
 
 import seedu.duke.food.WhatIAteList;
+import seedu.duke.journal.CollectionOfEntries;
 import seedu.duke.journal.CollectionOfNotes;
-import seedu.duke.module.Module;
-import seedu.duke.module.ModuleList;
 import seedu.duke.task.TaskList;
 
 import java.io.BufferedReader;
@@ -39,13 +38,14 @@ public class Storage {
     }
 
     public CollectionOfNotes collectionOfNotes = StorageNotes.readCollectionOfNotes();
+    public CollectionOfEntries collectionOfEntries = StorageEntries.readEntries();
     public StorageModule storageModule = new StorageModule();
 
     public Storage() throws IOException {
     }
 
     //@author nigel
-    static void checkAndAddDirectory(String folderName) throws IOException {
+    public static void checkAndAddDirectory(String folderName) throws IOException {
         String home = new File("").getAbsolutePath() + '/';
         File dirCheck = new File(home + folderName);
         if (dirCheck.isDirectory()) {
